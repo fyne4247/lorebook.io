@@ -1,12 +1,12 @@
 # Agent Handoff
 
 ## Objective And Acceptance
-Prepare Lorebook for a new public GitHub repository. Acceptance: AI turns cannot overwrite the open document or author-owned project files, setup uses only bundled skills, the README states beta and licence terms, and the Git history published from this checkout is a single new commit with the old history removed. Do not push until the owner asks.
+Publish Lorebook as a public GitHub repository. Acceptance: AI turns cannot overwrite the open document or author-owned project files, setup uses only bundled skills, the README states beta and licence terms, and the published history does not include the old novelWriter commits. The owner confirmed that rebuilding that history is unnecessary.
 
 ## Repository State
 Integration checkout is the `app` folder of this Lorebook project.
 Branch after the history rewrite: `main`.
-The previous novelWriter history, local feature branches, and tags are removed on purpose. Nothing has been pushed. The old `origin` remote pointed at `fyne4247/novelWriter` and is removed so a push cannot hit that repository by mistake.
+The previous novelWriter history, local feature branches, and tags are removed on purpose. Public repository: `https://github.com/fyne4247/lorebook.io`. Branch `main` is the only published history. Do not push to `fyne4247/novelWriter` and do not add the old history back.
 
 ## What Landed
 - macOS setup checks that Qt can start, and reinstalls it once if that check fails.
@@ -23,4 +23,4 @@ Full line and branch coverage of every AI module is not 100 percent. `novelwrite
 Two older full-suite failures were already reported on the upstream baseline (logging width and a missing sample archive). They were not rerun in this pass.
 
 ## NEXT ACTION
-When the owner asks to publish, create a new empty GitHub repository named `lorebook.io` (or `lorebook-io` if the name is taken) and push this `main` branch to it. Do not push to `fyne4247/novelWriter`. Do not force-push. Do not add the old history back.
+Publication of `main` to `fyne4247/lorebook.io` is the current task. After the push succeeds, leave the repository as it is unless the owner asks for another change. Do not force-push. Do not restore the old history.
