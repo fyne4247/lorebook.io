@@ -23,4 +23,4 @@ Full line and branch coverage of every AI module is not 100 percent. `novelwrite
 Two older full-suite failures were already reported on the upstream baseline (logging width and a missing sample archive). They were not rerun in this pass.
 
 ## NEXT ACTION
-Publication of `main` to `fyne4247/lorebook.io` is the current task. After the push succeeds, leave the repository as it is unless the owner asks for another change. Do not force-push. Do not restore the old history.
+Published. `main` is on `https://github.com/fyne4247/lorebook.io` and matches this checkout. Leave it unless the owner asks for another change. Do not force-push. Do not restore the old history.
