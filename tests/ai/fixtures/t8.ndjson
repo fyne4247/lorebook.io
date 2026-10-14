@@ -1,0 +1,5 @@
+{"type":"system","subtype":"init","cwd":"/tmp/lorebook-fixture","session_id":"00000000-0000-0000-0000-000000000003","model":"fixture-model","agents":[],"tools":[]}
+{"type":"stream_event","event":{"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"toolu_fixture_0003","name":"Read","input":{}}}}
+{"type":"stream_event","event":{"type":"content_block_start","index":1,"content_block":{"type":"tool_use","id":"toolu_fixture_0004","name":"Edit","input":{}}}}
+{"type":"stream_event","event":{"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Synthetic edit completed."}}}
+{"type":"result","subtype":"success","is_error":false,"result":"Synthetic edit completed.","session_id":"00000000-0000-0000-0000-000000000003","total_cost_usd":0.03,"usage":{"input_tokens":30,"output_tokens":8},"permission_denials":[]}

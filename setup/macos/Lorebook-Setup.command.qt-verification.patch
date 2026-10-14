@@ -1,0 +1,18 @@
+--- a/Setup.command
++++ b/Setup.command
+@@ -91,6 +91,16 @@
+   ok "Installed runtime packages"
+ fi
+
++# Verify the actual native Qt platform before continuing with setup.
++if "$PY" "$APP/setup/macos/verify_qt.py" "$PY"; then
++  ok "Native Qt Cocoa startup verified"
++else
++  err "Qt could not start on macOS, even after one repair attempt."
++  echo "  Check the Python/PyQt6 installation, then run Setup.command again."
++  read -r -p "Press Enter to close..."
++  exit 1
++fi
++
+ # Optional dev/test extras (best-effort)
+ (cd "$APP" && "$PY" -m pip install pytest pytest-qt pytest-timeout -q) 2>/dev/null && ok "Test tools installed" || true

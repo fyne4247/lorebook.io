@@ -1,0 +1,71 @@
+# macOS
+.DS_Store
+
+# Setup/Install
+/MANIFEST
+/build/
+/build_*/
+/deploy/
+/dist/
+/dist_*/
+*.spec
+*.egg-info
+setup.iss
+/novelwriter.desktop
+/novelWriter.pyw
+/setup/macos/Info.plist
+/setup/windows/build
+.venv
+
+# Translations
+/novelwriter/assets/i18n/*.qm
+.qmake.stash
+i18n/*.qm
+i18n/*.qph
+
+# Icons Themes Except Material Symbols
+/novelwriter/assets/icons/*.icons
+!/novelwriter/assets/icons/material_*.icons
+
+# Documentation
+/docs/build/
+/docs/source/locales/**/*.mo
+/novelwriter/assets/help/
+/novelwriter/assets/manual*.pdf
+*.qch
+*.qhc
+.~lock.*
+
+# Python Temp
+__pycache__
+*.pyc
+
+# Sample Project
+/novelwriter/assets/sample.zip
+/sample/meta
+/sample/**/*.bak
+/sample/*.lock
+/sample/ToC.txt
+
+# PyTest
+/prof/
+/htmlcov/
+/tests/temp
+/tests/_temp
+/.pytest_cache
+/pytestdebug.log
+
+# Coverage
+/.coverage
+/.coveragerc
+/coverage.*
+
+# Other
+/test.py
+.config
+.local
+*.patch
+
+# IDE
+.vscode
+.ruff_cache

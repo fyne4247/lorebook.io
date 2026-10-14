@@ -1,0 +1,30 @@
+AI Assistant assets (Lorebook fork)
+===================================
+
+This directory contains editorial agent and skill markdown adapted from the
+Brainstormer project, a fork of Creative Writing Skills, for use with the
+optional Claude Code integration in Lorebook.
+
+Source project: Creative Writing Skills by Jimmy Yao (@haowjy)
+  https://github.com/haowjy/creative-writing-skills
+Immediate source: brainstormer by fyne4247, a fork of the project above
+  https://github.com/fyne4247/brainstormer
+License: Apache License 2.0
+License text: ../../../setup/LICENSE-Apache-2.0.txt
+Source checked: 14 October 2026. The upstream repository did not contain a
+separate NOTICE file at that time.
+
+Changes made for Lorebook: the agent and skill Markdown was adapted for
+novelWriter projects and its project-setup/sidebar workflow, and is distributed
+as versioned package data so installed and source-run copies use the same files.
+Lorebook project code and writing prompts are separate works; this notice does
+not change the upstream licence.
+
+Contents:
+  claude/agents/  — agent system prompts (critic, muse, …)
+  claude/skills/  — skill packages loaded by those agents
+
+These files are copied into a novelWriter project tree under .claude/ when the
+user runs "Set up AI for Project". They do not include the Claude Code binary
+or any API credentials. The fork was prepared for public distribution on
+14 October 2026.
