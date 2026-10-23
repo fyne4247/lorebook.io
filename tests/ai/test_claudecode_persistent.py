@@ -1,17 +1,14 @@
-"""
-novelWriter – Persistent Claude Code Backend Tests
+"""novelWriter - Persistent Claude Code Backend Tests.
 ==================================================
 
 Covers the argv builder, change-detecting setters (respawn-on-change), and the
 pre-spawn turn guards for :class:`ClaudeCodePersistentBackend`. No real process
 is launched: spawning is monkeypatched where a turn would otherwise start one.
+
+Copyright (C) 2026 novelWriter contributors
 """
 
 from __future__ import annotations
-
-from pathlib import Path
-
-import pytest
 
 from novelwriter.ai.backend import (
     BASE_DISALLOWED_TOOLS,
@@ -151,7 +148,8 @@ class TestRespawnOnChange:
     def test_remote_control_toggle_marks_dirty(self):
         be = ClaudeCodePersistentBackend()
         be.setRemoteControl(True, "x")
-        assert be._dirty is True and be.remoteControl is True
+        assert be._dirty is True
+        assert be.remoteControl is True
         be._dirty = False
         be.setRemoteControl(True, "x")
         assert be._dirty is False

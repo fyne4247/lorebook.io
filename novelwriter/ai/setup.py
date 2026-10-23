@@ -21,11 +21,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from __future__ import annotations
 
-import logging
 import hashlib
 import json
+import logging
 import shutil
 import xml.etree.ElementTree as ET
+
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -302,13 +303,12 @@ def listManuscriptHandles(projectPath: Path | str) -> list[str]:
     nwx = projectPath / "nwProject.nwx"
     if not nwx.is_file():
         return []
-    handles: list[str] = []
     tree = ET.parse(nwx)
-    for item in tree.getroot().iter("item"):
-        if item.get("class") == "NOVEL" and item.get("type") == "FILE":
-            if h := item.get("handle"):
-                handles.append(h)
-    return handles
+    return [
+        handle
+        for item in tree.getroot().iter("item")
+        if item.get("class") == "NOVEL" and item.get("type") == "FILE" and (handle := item.get("handle"))
+    ]
 
 
 # =============================================================================

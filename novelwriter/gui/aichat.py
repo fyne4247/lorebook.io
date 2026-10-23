@@ -21,9 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import re
 import time
+
 from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
@@ -618,10 +620,8 @@ class GuiAiChat(QWidget):
             result = self._turnSync.cancelTurn() if cancelled else self._turnSync.endTurn()
         except Exception:
             logger.exception("AI turn sync endTurn failed")
-            try:
+            with contextlib.suppress(Exception):
                 self._turnSync.unlockEditor()
-            except Exception:
-                pass
             return
 
         if result.manuscriptTouched:
@@ -669,10 +669,8 @@ class GuiAiChat(QWidget):
             (s.turnComplete, self._onTurnComplete),
             (s.errorOccurred, self._onErrorOccurred),
         ):
-            try:
+            with contextlib.suppress(TypeError):
                 signal.disconnect(slot)
-            except TypeError:
-                pass
 
     ##
     #  Private: UI slots

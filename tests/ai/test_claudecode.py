@@ -24,8 +24,7 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import patch
 
-import pytest
-
+from novelwriter.ai import isAiAvailable
 from novelwriter.ai.backend import (
     BASE_DISALLOWED_TOOLS,
     DEFAULT_WRITER_ALLOWED_TOOLS,
@@ -36,8 +35,6 @@ from novelwriter.ai.claudecode import (
     isClaudeAvailable,
     resolveClaudeBinary,
 )
-from novelwriter.ai import isAiAvailable
-
 
 ##
 #  Binary resolution
