@@ -26,10 +26,9 @@ from pathlib import Path
 import pytest
 
 from novelwriter import CONFIG, SHARED
-from novelwriter.ai.setup import listManuscriptHandles, setupProjectAi
 from novelwriter.ai.claudecode import ClaudeCodePersistentBackend
+from novelwriter.ai.setup import listManuscriptHandles, setupProjectAi
 from novelwriter.ai.sync import (
-    AiTurnSync,
     backupManuscriptFiles,
     detectManuscriptTouches,
     diffContentHashes,
@@ -42,7 +41,6 @@ from novelwriter.core.project import NWProject
 from novelwriter.enum import nwItemClass
 
 from tests.helpers import C, buildTestProject
-
 
 ##
 #  Pure helpers
@@ -92,6 +90,7 @@ class TestManuscriptProtection:
 
 @pytest.mark.core
 def testImportInboxNotes(projPath, mockGUI, mockRnd):
+    """Import inbox notes into the project tree."""
     project = NWProject()
     buildTestProject(project, projPath)
 
@@ -123,7 +122,7 @@ def testImportInboxNotes(projPath, mockGUI, mockRnd):
 
 @pytest.mark.gui
 def testTurnSync_BeginEndKbLock(qtbot, nwGUI, projPath, mockRnd):
-    """beginTurn locks open kb note; endTurn unlocks and reloads changes."""
+    """BeginTurn locks open kb note; endTurn unlocks and reloads changes."""
     buildTestProject(nwGUI, projPath)
     setupProjectAi(SHARED.project)
 
@@ -187,7 +186,7 @@ def testTurnSync_ManuscriptLockedAndReverts(qtbot, nwGUI, projPath, mockRnd):
 
 @pytest.mark.gui
 def testTurnSync_InboxImportOnEnd(qtbot, nwGUI, projPath, mockRnd):
-    """endTurn imports _inbox notes into the tree."""
+    """EndTurn imports _inbox notes into the tree."""
     buildTestProject(nwGUI, projPath)
     setupProjectAi(SHARED.project)
 
@@ -244,6 +243,7 @@ def testTurnSync_PanelWiresBeginEnd(qtbot, nwGUI, projPath, mockRnd):
 def testAiTurnSafetyPreparationFailureAborts(failure, qtbot, monkeypatch, nwGUI, projPath, mockRnd):
     """A failed safety snapshot never starts a writer or leaves sync active."""
     from novelwriter.ai import sync as aiSync
+
     from tests.gui.test_gui_aichat import FakeBackend
 
     buildTestProject(nwGUI, projPath)

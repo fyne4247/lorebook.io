@@ -21,8 +21,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import logging
+
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -375,12 +377,12 @@ def revertManuscriptFiles(
             path.write_bytes(data)
             reverted.append(h)
         except OSError:
-            logger.error("Failed to revert manuscript %s", h, exc_info=True)
+            logger.exception("Failed to revert manuscript %s", h)
     return reverted
 
 
 def diffContentHashes(before: dict[str, str], after: dict[str, str]) -> list[str]:
-    """Handles that are new or whose hash changed."""
+    """Return handles that are new or whose hash changed."""
     changed: list[str] = []
     for h, digest in after.items():
         if before.get(h) != digest:
@@ -424,7 +426,7 @@ def importInboxNotes(project: NWProject, projectPath: Path) -> list[str]:
             try:
                 body = mdPath.read_text(encoding="utf-8")
             except OSError:
-                logger.error("AI inbox: cannot read %s", mdPath, exc_info=True)
+                logger.exception("AI inbox: cannot read %s", mdPath)
                 continue
 
             handle = project.newFile(title, root)
@@ -467,7 +469,5 @@ def clearInbox(projectPath: Path) -> None:
         return
     for child in list(inbox.iterdir()):
         if child.is_dir() and not any(child.iterdir()):
-            try:
+            with contextlib.suppress(OSError):
                 child.rmdir()
-            except OSError:
-                pass

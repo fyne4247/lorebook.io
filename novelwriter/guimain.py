@@ -43,6 +43,10 @@ from PyQt6.QtWidgets import (
 )
 
 from novelwriter import CONFIG, SHARED, __hexversion__, __version__
+from novelwriter.ai.backend import isReadOnlyAgent
+from novelwriter.ai.claudecode import ClaudeCodeBackend, ClaudeCodePersistentBackend
+from novelwriter.ai.setup import setupProjectAi
+from novelwriter.ai.sync import AiTurnSync
 from novelwriter.common import formatFileFilter, formatVersion, hexToInt, minmax, safeIsFile
 from novelwriter.constants import nwConst
 from novelwriter.dialogs.about import GuiAbout
@@ -52,10 +56,6 @@ from novelwriter.dialogs.wordlist import GuiWordList
 from novelwriter.editor.editor import GuiDocEditor
 from novelwriter.enum import nwDocAction, nwDocInsert, nwDocMode, nwFocus, nwItemType, nwView, nwVimMode
 from novelwriter.extensions.progressbars import NProgressSimple
-from novelwriter.ai.claudecode import ClaudeCodeBackend, ClaudeCodePersistentBackend
-from novelwriter.ai.backend import isReadOnlyAgent
-from novelwriter.ai.setup import setupProjectAi
-from novelwriter.ai.sync import AiTurnSync
 from novelwriter.gui.aichat import GuiAiChat
 from novelwriter.gui.itemdetails import GuiItemDetails
 from novelwriter.gui.mainmenu import GuiMainMenu
@@ -267,7 +267,7 @@ class GuiMain(QMainWindow):
         self.mainMenu.requestViewChange.connect(self._changeView)
 
         self.sideBar.requestViewChange.connect(self._changeView)
-        self.sideBar.toggleAiPanel.connect(self._toggleAiPanelVisibility)
+        self.sideBar.toggleAiPanel.connect(self.toggleAiPanelVisibility)
 
         self.aiChat.setSelectionProvider(self._aiSelectionProvider)
         self.aiChat.setPreTurnHook(self._aiPreTurn)
@@ -1238,7 +1238,7 @@ class GuiMain(QMainWindow):
         self.docViewerPanel.setVisible(CONFIG.showViewerPanel)
 
     @pyqtSlot()
-    def _toggleAiPanelVisibility(self) -> None:
+    def toggleAiPanelVisibility(self) -> None:
         """Toggle the visibility of the AI Assistant panel."""
         # Persist current width before hiding.
         if self.aiChat.isVisible():
@@ -1339,7 +1339,7 @@ class GuiMain(QMainWindow):
             label = f"{title} (selection)" if title else "selection"
             return raw, label, "selection", len(raw)
 
-        # 2–3) Project tree file selection.
+        # 2-3) Project tree file selection.
         fileHandles = self._aiTreeFileHandles()
         if len(fileHandles) >= 2:
             text, label, bodyChars = self._aiDocBlocks(fileHandles)
@@ -1404,7 +1404,7 @@ class GuiMain(QMainWindow):
             self.projView.openProjectTasks()
             self.aiChat.openProjectTasks()
             if not CONFIG.showAiPanel:
-                self._toggleAiPanelVisibility()
+                self.toggleAiPanelVisibility()
         else:
             title = self.tr("AI update failed.") if refresh else self.tr("AI setup failed.")
             SHARED.error(

@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import sys
+
 from unittest.mock import patch
 
 from novelwriter.ai.claudecode import classifyClaudeError, missingBinaryMessage

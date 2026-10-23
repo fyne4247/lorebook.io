@@ -22,6 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import json
+
 from pathlib import Path
 
 import pytest
@@ -428,7 +429,8 @@ class TestEmitEventToSignals:
             if ev := parseStreamLine(line):
                 emitEventToSignals(ev, hub)
 
-        assert sessions and sessions[0]
+        assert sessions
+        assert sessions[0]
         assert chunks
         assert completes
         text, meta = completes[0]

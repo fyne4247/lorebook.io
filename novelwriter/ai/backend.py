@@ -62,6 +62,7 @@ class AiEvent:
         text: Human-facing text (chunk content, tool name, error message, …).
         data: Structured payload (result meta, session fields, …).
         raw:  The original JSON object when available.
+
     """
 
     kind: AiEventKind
@@ -157,9 +158,9 @@ def formatTokenCount(n: int) -> str:
     n = max(0, int(n))
     if n >= 1_000_000:
         val = n / 1_000_000
-        return f"{val:.1f}M" if val < 10 else f"{int(round(val))}M"
+        return f"{val:.1f}M" if val < 10 else f"{round(val)}M"
     if n >= 10_000:
-        return f"{int(round(n / 1000))}k"
+        return f"{round(n / 1000)}k"
     if n >= 1000:
         return f"{n / 1000:.1f}k"
     return str(n)
@@ -425,6 +426,7 @@ def parseStreamLine(line: str) -> AiEvent | None:
 
     Never raises on unknown or malformed content — returns AiEvent(ERROR) or
     AiEvent(UNKNOWN) instead. Callers can ignore IGNORE/UNKNOWN events.
+
     """
     text = line.strip()
     if not text:
@@ -444,11 +446,7 @@ def parseStreamLine(line: str) -> AiEvent | None:
 
 def parseStreamLines(text: str) -> list[AiEvent]:
     """Parse a multi-line NDJSON blob; skip blank lines and None results."""
-    events: list[AiEvent] = []
-    for line in text.splitlines():
-        if ev := parseStreamLine(line):
-            events.append(ev)
-    return events
+    return [ev for line in text.splitlines() if (ev := parseStreamLine(line))]
 
 
 def _classifyEvent(obj: dict[str, Any]) -> AiEvent:
@@ -629,16 +627,15 @@ def _classifyUser(obj: dict[str, Any]) -> AiEvent:
             )
         return AiEvent(kind=AiEventKind.IGNORE, text="tool_result", raw=obj)
 
-    if isinstance(result, dict):
+    if isinstance(result, dict) and (result.get("error") or result.get("is_error")):
         # Some builds put an error flag on the result object.
-        if result.get("error") or result.get("is_error"):
-            msg = str(result.get("error") or result.get("message") or "tool error")
-            return AiEvent(
-                kind=AiEventKind.TOOL_ACTIVITY,
-                text=msg[:200],
-                data={"phase": "error", "tool_use_result": result},
-                raw=obj,
-            )
+        msg = str(result.get("error") or result.get("message") or "tool error")
+        return AiEvent(
+            kind=AiEventKind.TOOL_ACTIVITY,
+            text=msg[:200],
+            data={"phase": "error", "tool_use_result": result},
+            raw=obj,
+        )
 
     return AiEvent(kind=AiEventKind.IGNORE, text="tool_result", raw=obj)
 
