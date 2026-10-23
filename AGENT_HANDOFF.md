@@ -22,5 +22,17 @@ Type check of the AI modules and the touched screens: 0 errors when pointed at t
 Full line and branch coverage of every AI module is not 100 percent. `novelwriter/ai` is about 72 percent line-and-branch after those tests. Chat log and agent modules are fully covered. The Claude process code is the large gap.
 Two older full-suite failures were already reported on the upstream baseline (logging width and a missing sample archive). They were not rerun in this pass.
 
+## Active CI Repair (23 October 2026)
+
+Owner requested Luna agents to fix the diagnosed GitHub check failures. This is a bounded repair, without a phase-oriented plan. Do not push, publish, restore old history, or change the AI permission policy.
+
+Baseline: `main`, `fcb0d2df48dbce4cd4d31af2f22ea839ebc44457`; initially clean. Integration branch: `fix/github-checks` in `app`. Nothing merged to main or pushed in this repair.
+
+- Luna `formatting_and_ai_test`: `../ci-formatting`, branch `fix/ci-formatting`, starting at baseline. Fix formatting in the prose-critique analyser, editor header, and GUI AI end-to-end tests; align the stale writer assertion with the restricted permission policy. State: implementing, unreviewed.
+- Luna `config_reference`: `../ci-config-reference`, branch `fix/ci-config-reference`, starting at baseline. Correct the two blank AI settings in the expected config file. State: implementing, unreviewed.
+- Parent owns this handoff, independent review, integration, and verification.
+
+Acceptance: formatting check passes; the two reported failing tests pass without weakening manuscript protections or changing config behaviour; run remaining syntax checks and proportionate offscreen tests, reporting any additional failures. No repair checks run yet. Existing historical verification above is not verification of this repair.
+
 ## NEXT ACTION
-Published. `main` is on `https://github.com/fyne4247/lorebook.io` and matches this checkout. Leave it unless the owner asks for another change. Do not force-push. Do not restore the old history.
+Review each Luna agent's committed changes and focused test evidence. Integrate accepted changes into `fix/github-checks`, run the integrated checks, and record exact commits and results here before reporting. Keep the work local; do not push.
