@@ -28,7 +28,7 @@ Owner requested Luna agents to fix the diagnosed GitHub check failures. This is 
 
 Baseline: `main`, `fcb0d2df48dbce4cd4d31af2f22ea839ebc44457`; initially clean. Integration branch: `fix/github-checks` in `app`. Nothing merged to main or pushed in this repair.
 
-- Luna `formatting_and_ai_test`: `../ci-formatting`, branch `fix/ci-formatting`, starting at baseline. Fix formatting in the prose-critique analyser, editor header, and GUI AI end-to-end tests; align the stale writer assertion with the restricted permission policy. State: implementing, unreviewed.
+- Luna `formatting_and_ai_test`: `../ci-formatting`, branch `fix/ci-formatting`, commit `baa2e1f53ac7ba67aceb5fae25800b89f80b0038`. Parent reviewed and integrated the three-file change. Offscreen GUI tests: 8 passed, 1 skipped; per-file Ruff formatting/checks and Pyright passed. Policy assertions were strengthened; implementation permission policy unchanged. Analyser attribution checked against bundled NOTICE.
 - Luna `config_reference`: `../ci-config-reference`, branch `fix/ci-config-reference`, commit `022feba8637f879b32bc8c8ed7eabd991c745d9e`. Parent reviewed the exact two reference-line changes and integrated them. Targeted config test passed (1 passed). The two trailing spaces are intentional serializer output, not whitespace mistakes.
 - Luna `remaining_lint`: `../ci-lint`, branch `fix/ci-lint`, starting at baseline. Resolve remaining lint findings outside the first agent's three files. State: implementing, unreviewed.
 - Parent owns this handoff, independent review, integration, and verification.
