@@ -44,13 +44,13 @@ def testAiWiring_PanelInMainWindow(qtbot, nwGUI, projPath, mockRnd):
     assert nwGUI.aiChat.isVisible() is False
 
     # Toggle via slot
-    nwGUI._toggleAiPanelVisibility()
+    nwGUI.toggleAiPanelVisibility()
     assert CONFIG.showAiPanel is True
     assert nwGUI.aiChat.isVisible() is True
     assert nwGUI.mainMenu.aToggleAiPanel.isChecked() is True
 
     # Toggle back
-    nwGUI._toggleAiPanelVisibility()
+    nwGUI.toggleAiPanelVisibility()
     assert CONFIG.showAiPanel is False
     assert nwGUI.aiChat.isVisible() is False
 
