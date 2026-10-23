@@ -30,10 +30,12 @@ Baseline: `main`, `fcb0d2df48dbce4cd4d31af2f22ea839ebc44457`; initially clean. I
 
 - Luna `formatting_and_ai_test`: `../ci-formatting`, branch `fix/ci-formatting`, commit `baa2e1f53ac7ba67aceb5fae25800b89f80b0038`. Parent reviewed and integrated the three-file change. Offscreen GUI tests: 8 passed, 1 skipped; per-file Ruff formatting/checks and Pyright passed. Policy assertions were strengthened; implementation permission policy unchanged. Analyser attribution checked against bundled NOTICE.
 - Luna `config_reference`: `../ci-config-reference`, branch `fix/ci-config-reference`, commit `022feba8637f879b32bc8c8ed7eabd991c745d9e`. Parent reviewed the exact two reference-line changes and integrated them. Targeted config test passed (1 passed). The two trailing spaces are intentional serializer output, not whitespace mistakes.
-- Luna `remaining_lint`: `../ci-lint`, branch `fix/ci-lint`, starting at baseline. Resolve remaining lint findings outside the first agent's three files. State: implementing, unreviewed.
+- Luna `remaining_lint`: `../ci-lint`, branch `fix/ci-lint`, commit `1979b54655f9a06b43c3b04c5e49c7455584d608`. Parent reviewed the diff and integrated it, but review found two remaining test references to a renamed panel callback in `tests/gui/test_gui_ai_wiring.py`; correction assigned to the same agent and pending review. State: changes requested. Agent focused suite: 107 passed; owned-file Ruff and full Pyright passed.
 - Parent owns this handoff, independent review, integration, and verification.
 
 Acceptance: formatting and lint checks pass; the two reported failing tests pass without weakening manuscript protections or changing config behaviour; run type checks and proportionate offscreen tests, reporting any additional failures. Parent baseline full Ruff check found 99 findings previously masked by formatting; those are now delegated. Baseline full Pyright with the app virtualenv passed (0 errors). Existing historical verification above is not verification of this repair.
+
+Integrated full Ruff format check: 271 files already formatted; full Ruff check passed; full Pyright passed (0 errors). Parent is running the offscreen suite excluding the wiring test file, which the correcting agent is verifying separately. Do not report completion until that correction is reviewed and integrated.
 
 ## NEXT ACTION
 Review each Luna agent's committed changes and focused test evidence. Integrate accepted changes into `fix/github-checks`, run the integrated checks, and record exact commits and results here before reporting. Keep the work local; do not push.
