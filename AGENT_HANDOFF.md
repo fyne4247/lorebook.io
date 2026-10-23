@@ -29,10 +29,11 @@ Owner requested Luna agents to fix the diagnosed GitHub check failures. This is 
 Baseline: `main`, `fcb0d2df48dbce4cd4d31af2f22ea839ebc44457`; initially clean. Integration branch: `fix/github-checks` in `app`. Nothing merged to main or pushed in this repair.
 
 - Luna `formatting_and_ai_test`: `../ci-formatting`, branch `fix/ci-formatting`, starting at baseline. Fix formatting in the prose-critique analyser, editor header, and GUI AI end-to-end tests; align the stale writer assertion with the restricted permission policy. State: implementing, unreviewed.
-- Luna `config_reference`: `../ci-config-reference`, branch `fix/ci-config-reference`, starting at baseline. Correct the two blank AI settings in the expected config file. State: implementing, unreviewed.
+- Luna `config_reference`: `../ci-config-reference`, branch `fix/ci-config-reference`, commit `022feba8637f879b32bc8c8ed7eabd991c745d9e`. Parent reviewed the exact two reference-line changes and integrated them. Targeted config test passed (1 passed). The two trailing spaces are intentional serializer output, not whitespace mistakes.
+- Luna `remaining_lint`: `../ci-lint`, branch `fix/ci-lint`, starting at baseline. Resolve remaining lint findings outside the first agent's three files. State: implementing, unreviewed.
 - Parent owns this handoff, independent review, integration, and verification.
 
-Acceptance: formatting check passes; the two reported failing tests pass without weakening manuscript protections or changing config behaviour; run remaining syntax checks and proportionate offscreen tests, reporting any additional failures. No repair checks run yet. Existing historical verification above is not verification of this repair.
+Acceptance: formatting and lint checks pass; the two reported failing tests pass without weakening manuscript protections or changing config behaviour; run type checks and proportionate offscreen tests, reporting any additional failures. Parent baseline full Ruff check found 99 findings previously masked by formatting; those are now delegated. Baseline full Pyright with the app virtualenv passed (0 errors). Existing historical verification above is not verification of this repair.
 
 ## NEXT ACTION
 Review each Luna agent's committed changes and focused test evidence. Integrate accepted changes into `fix/github-checks`, run the integrated checks, and record exact commits and results here before reporting. Keep the work local; do not push.
