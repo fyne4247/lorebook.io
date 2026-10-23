@@ -22,37 +22,36 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
 import os
-from pathlib import Path
 
 import pytest
 
-from PyQt6.QtCore import QTimer
-
 from novelwriter import SHARED
-from novelwriter.ai.backend import DEFAULT_WRITER_ALLOWED_TOOLS, buildDisallowedTools
+from novelwriter.ai.backend import DEFAULT_WRITER_ALLOWED_TOOLS
 from novelwriter.ai.claudecode import ClaudeCodeBackend
-from novelwriter.ai.setup import listManuscriptHandles, setupProjectAi, writeHandleIndex
+from novelwriter.ai.setup import listManuscriptHandles, setupProjectAi
 from novelwriter.core.project import NWProject
 from novelwriter.gui.aichat import GuiAiChat
 
-from tests.gui.test_gui_aichat import FakeBackend, _makePanel
+from tests.gui.test_gui_aichat import _makePanel
 from tests.helpers import buildTestProject
-
 
 ##
 #  Phase 4 acceptance: panel e2e vs FakeBackend
 ##
 
+
 @pytest.mark.gui
 def testE2E_SelectionThenStream(qtbot, mockGUIwithTheme, tmp_path):
-    """select text → ask critic → streamed reply (selection in prompt + cost)."""
+    """Select text → ask critic → streamed reply (selection in prompt + cost)."""
     panel, fake, dialog = _makePanel(qtbot, mockGUIwithTheme, tmp_path=tmp_path)
-    panel.setSelectionProvider(lambda: (
-        "The rain fell in sheets across the courtyard.",
-        "Chapter 1",
-        "selection",
-        46,
-    ))
+    panel.setSelectionProvider(
+        lambda: (
+            "The rain fell in sheets across the courtyard.",
+            "Chapter 1",
+            "selection",
+            46,
+        )
+    )
     panel.includeSelection.setChecked(True)
     idx = panel.agentCombo.findData("critic")
     if idx >= 0:
@@ -134,7 +133,7 @@ def testE2E_StopMidTurn(qtbot, mockGUIwithTheme, tmp_path):
 
 @pytest.mark.gui
 def testE2E_MuseWriterArgvAndDenyRules(qtbot, mockGUIwithTheme, tmp_path, mockGUI, mockRnd):
-    """muse uses acceptEdits + Agent tool + manuscript denies (fan-out ready)."""
+    """Muse uses restricted dontAsk permissions, Agent, and manuscript denies."""
     # Build a real project so we have NOVEL handles for deny rules
     project = NWProject()
     buildTestProject(project, tmp_path)
@@ -168,10 +167,13 @@ def testE2E_MuseWriterArgvAndDenyRules(qtbot, mockGUIwithTheme, tmp_path, mockGU
     assert "Bash" in denied
 
     argv = backend.buildArgv("Update the character note and consult a critic.")
-    assert argv[argv.index("--permission-mode") + 1] == "acceptEdits"
+    assert argv[argv.index("--permission-mode") + 1] == "dontAsk"
+    assert "--restricted" in argv
+    assert "--strict-mcp-config" in argv
+    assert argv[argv.index("--permission-prompts") + 1] == "none"
     allowIdx = argv.index("--allowedTools")
     allowed = []
-    for tok in argv[allowIdx + 1:]:
+    for tok in argv[allowIdx + 1 :]:
         if tok.startswith("--"):
             break
         allowed.append(tok)
@@ -258,9 +260,10 @@ def testE2E_WiredGuiMainPreTurn(qtbot, nwGUI, projPath, mockRnd):
 
     # Open a document and dirty it
     from tests.helpers import C
+
     assert nwGUI.openDocument(C.hSceneDoc)
     nwGUI.docEditor.setPlainText("# Scene\n\nDirty draft line for AI save-on-send.\n")
-    assert nwGUI.docEditor.docChanged is True or True  # some editors track differently
+    assert "Dirty draft line for AI save-on-send." in nwGUI.docEditor.toPlainText()
 
     # Invoke the hook directly (same as panel before send)
     nwGUI._aiPreTurn()
@@ -272,6 +275,7 @@ def testE2E_WiredGuiMainPreTurn(qtbot, nwGUI, projPath, mockRnd):
 ##
 #  Optional live e2e (real Claude Code CLI)
 ##
+
 
 @pytest.mark.slow
 @pytest.mark.skipif(

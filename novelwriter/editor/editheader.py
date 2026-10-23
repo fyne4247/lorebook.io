@@ -227,9 +227,7 @@ class GuiDocEditHeader(QWidget):
         """
         self._aiLocked = locked
         if locked:
-            banner = self.tr(
-                "AI is working — this note is locked until the turn completes"
-            )
+            banner = self.tr("AI is working — this note is locked until the turn completes")
             self.itemTitle.setText(banner)
             self.itemTitle.setColorState(nwState.ERROR)
         elif self._docHandle:

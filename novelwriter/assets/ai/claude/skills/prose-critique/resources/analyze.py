@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""
-Mechanical prose metrics for a markdown file.
+# Copyright (c) 2026 Jimmy Yao
+"""Mechanical prose metrics for a markdown file.
 
 Usage:
     uv run resources/analyze.py <file.md> [window_size]
@@ -12,9 +12,9 @@ import argparse
 import re
 import statistics
 import sys
+
 from collections import Counter
 from pathlib import Path
-
 
 WORD_RE = re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?")
 SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
@@ -79,6 +79,7 @@ PRONOUN_GROUPS = {
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line options for the prose analysis."""
     parser = argparse.ArgumentParser(description="Analyze prose mechanics in markdown.")
     parser.add_argument("file", help="Markdown file to analyze")
     parser.add_argument(
@@ -92,6 +93,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def strip_frontmatter_and_fences(text: str) -> str:
+    """Remove YAML frontmatter and fenced code blocks from markdown."""
     lines = text.splitlines()
     start = 0
     if lines and lines[0].strip() == "---":
@@ -112,29 +114,32 @@ def strip_frontmatter_and_fences(text: str) -> str:
 
 
 def strip_markdown(text: str) -> str:
+    """Remove common inline and heading markup from markdown."""
     text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"\1", text)
     text = re.sub(r"\*([^*]+)\*", r"\1", text)
-    text = re.sub(r"_([^_]+)_", r"\1", text)
-    return text
+    return re.sub(r"_([^_]+)_", r"\1", text)
 
 
 def get_sentences(dense_text: str) -> list[str]:
+    """Split prose into non-empty sentences."""
     flattened = " ".join(line.strip() for line in dense_text.splitlines() if line.strip())
-    sentences = [part.strip() for part in SENTENCE_SPLIT_RE.split(flattened) if part.strip()]
-    return sentences
+    return [part.strip() for part in SENTENCE_SPLIT_RE.split(flattened) if part.strip()]
 
 
 def words(text: str) -> list[str]:
+    """Return lowercase words found in text."""
     return [match.group(0).lower() for match in WORD_RE.finditer(text)]
 
 
 def paragraphs(prose_text: str) -> list[str]:
+    """Split prose into non-empty paragraphs."""
     return [chunk.strip() for chunk in re.split(r"\n\s*\n", prose_text) if chunk.strip()]
 
 
 def print_sentence_lengths(sentences: list[str]) -> None:
+    """Print summary statistics for sentence lengths."""
     print("## Sentence Length Distribution")
     print()
     lengths = [len(words(sentence)) for sentence in sentences if words(sentence)]
@@ -157,6 +162,7 @@ def print_sentence_lengths(sentences: list[str]) -> None:
 
 
 def print_sentence_openers(sentences: list[str]) -> None:
+    """Print the distribution of sentence opening words."""
     print("## Sentence Opener Variety")
     print()
     opener_words = []
@@ -182,23 +188,16 @@ def print_sentence_openers(sentences: list[str]) -> None:
             categories["other"] += 1
 
     total = len(opener_words)
-    print(
-        f"  Pronoun starts:      {categories['pronouns']} ({(categories['pronouns'] / total) * 100:.0f}%)"
-    )
-    print(
-        f"  Article starts:      {categories['articles']} ({(categories['articles'] / total) * 100:.0f}%)"
-    )
-    print(
-        f"  Conjunction starts:  {categories['conjunctions']} ({(categories['conjunctions'] / total) * 100:.0f}%)"
-    )
-    print(
-        f"  Other starts:        {categories['other']} ({(categories['other'] / total) * 100:.0f}%)"
-    )
+    print(f"  Pronoun starts:      {categories['pronouns']} ({(categories['pronouns'] / total) * 100:.0f}%)")
+    print(f"  Article starts:      {categories['articles']} ({(categories['articles'] / total) * 100:.0f}%)")
+    print(f"  Conjunction starts:  {categories['conjunctions']} ({(categories['conjunctions'] / total) * 100:.0f}%)")
+    print(f"  Other starts:        {categories['other']} ({(categories['other'] / total) * 100:.0f}%)")
     print(f"  Total sentences:     {total}")
     print()
 
 
 def print_dialogue_ratio(dense_lines: list[str]) -> None:
+    """Print the ratio of dialogue lines to narration lines."""
     print("## Dialogue-to-Narration Ratio")
     print()
     total_lines = len(dense_lines)
@@ -209,17 +208,14 @@ def print_dialogue_ratio(dense_lines: list[str]) -> None:
 
     dialogue_lines = sum(1 for line in dense_lines if QUOTE_RE.search(line))
     narration_lines = total_lines - dialogue_lines
-    print(
-        f"  Dialogue lines:   {dialogue_lines} ({(dialogue_lines / total_lines) * 100:.0f}%)"
-    )
-    print(
-        f"  Narration lines:  {narration_lines} ({(narration_lines / total_lines) * 100:.0f}%)"
-    )
+    print(f"  Dialogue lines:   {dialogue_lines} ({(dialogue_lines / total_lines) * 100:.0f}%)")
+    print(f"  Narration lines:  {narration_lines} ({(narration_lines / total_lines) * 100:.0f}%)")
     print(f"  Total lines:      {total_lines}")
     print()
 
 
 def print_repetition(paragraph_list: list[str], window_size: int) -> None:
+    """Print repeated words found across paragraph windows."""
     print(f"## Repetition Detection (window: {window_size} paragraphs)")
     print()
     if len(paragraph_list) < 2:
@@ -228,17 +224,12 @@ def print_repetition(paragraph_list: list[str], window_size: int) -> None:
         return
 
     findings: dict[tuple[str, int, int], int] = {}
-    for start in range(0, max(len(paragraph_list) - window_size + 1, 1)):
+    for start in range(max(len(paragraph_list) - window_size + 1, 1)):
         window = paragraph_list[start : start + window_size]
-        counts = Counter(
-            word
-            for paragraph in window
-            for word in words(paragraph)
-            if len(word) >= 5
-        )
+        counts = Counter(word for paragraph in window for word in words(paragraph) if len(word) >= 5)
         for word, count in counts.items():
             if count >= 3:
-                findings[(word, start + 1, start + len(window))] = count
+                findings[word, start + 1, start + len(window)] = count
 
     if not findings:
         print("  (no notable repetitions detected)")
@@ -254,6 +245,7 @@ def print_repetition(paragraph_list: list[str], window_size: int) -> None:
 
 
 def print_pronouns(dense_text: str) -> None:
+    """Print the distribution of pronoun groups in prose."""
     print("## Pronoun Distribution (POV Consistency)")
     print()
     all_words = words(dense_text)
@@ -272,6 +264,7 @@ def print_pronouns(dense_text: str) -> None:
 
 
 def main() -> int:
+    """Run the prose analysis and return a process status code."""
     args = parse_args()
     path = Path(args.file)
     if not path.is_file():
