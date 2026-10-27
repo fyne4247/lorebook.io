@@ -36,11 +36,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          uv run --no-sync coverage run -m pytest -v --timeout=60
-          uv run --no-sync coverage xml
-
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          uv run --no-sync pytest -v --timeout=60
