@@ -375,7 +375,7 @@ class GuiMainMenu(QMenuBar):
         self.aToggleAiPanel.setShortcut("Ctrl+Shift+A")
         self.aToggleAiPanel.setCheckable(True)
         self.aToggleAiPanel.setChecked(CONFIG.showAiPanel)
-        self.aToggleAiPanel.triggered.connect(self.mainGui._toggleAiPanelVisibility)
+        self.aToggleAiPanel.triggered.connect(self.mainGui.toggleAiPanelVisibility)
         self.mainGui.addAction(self.aToggleAiPanel)
 
         # View > Separator

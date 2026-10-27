@@ -147,6 +147,7 @@ def testDlgPreferences_Actions(qtbot, monkeypatch, nwGUI):
 
 @pytest.mark.gui
 def testBrowseClaudeBinaryDoesNotChangeBackupHelp(qtbot, monkeypatch, nwGUI, tmp_path):
+    """Keep backup-path help unchanged when browsing for Claude."""
     prefs = GuiPreferences(nwGUI)
     backupHelp = prefs.mainForm._editable["backupPath"].text()
     binaryPath = tmp_path / "claude"

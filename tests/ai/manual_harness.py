@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""
-Manual harness: stream a single Claude Code turn and print chunks to stdout.
+"""Manual harness: stream a single Claude Code turn and print chunks to stdout.
 
 Usage (from app/):
   .venv/bin/python tests/ai/manual_harness.py /path/to/project "your question" [--agent critic]
 
 Requires the Claude Code CLI on PATH and a project directory that is NOT under
 any .claude/ path segment (Phase 0 gotcha).
+
+Copyright (C) 2026 novelWriter contributors
 """
 
 from __future__ import annotations
 
 import argparse
 import sys
+
 from pathlib import Path
 
 # Allow running without install: repo root on sys.path
@@ -26,6 +28,7 @@ from novelwriter.ai.claudecode import ClaudeCodeBackend  # noqa: E402
 
 
 def main() -> int:
+    """Run one interactive Claude Code turn for manual diagnostics."""
     parser = argparse.ArgumentParser(description="Stream one Claude Code turn.")
     parser.add_argument("project", type=Path, help="novelWriter project directory")
     parser.add_argument("prompt", help="User prompt for the turn")

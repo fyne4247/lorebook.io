@@ -102,7 +102,6 @@ class TestGenerateIndex:
         assert index.collectProjectEntries(tmp_path)[0].title == "Named"
 
     def test_resolver_fallbacks_and_unreadable_expansion(self, tmp_path: Path, monkeypatch):
-        from novelwriter.ai import index
 
         content = tmp_path / "content"
         content.mkdir()
@@ -265,6 +264,7 @@ class TestResolveExpand:
 
 @pytest.mark.core
 def testSetupWritesSmartIndex(projPath, mockGUI, mockRnd):
+    """Write the generated project index during AI setup."""
     project = NWProject()
     buildTestProject(project, projPath)
     # Add a character with short blurb
@@ -285,7 +285,7 @@ def testSetupWritesSmartIndex(projPath, mockGUI, mockRnd):
 @pytest.mark.gui
 def testExpandInjectedInPrompt(qtbot, mockGUIwithTheme, tmp_path, mockGUI, mockRnd):
     """Expand [[Name]] is injected as <document> before the user question."""
-    from tests.gui.test_gui_aichat import FakeBackend, _makePanel
+    from tests.gui.test_gui_aichat import _makePanel
 
     content = tmp_path / "content"
     content.mkdir()

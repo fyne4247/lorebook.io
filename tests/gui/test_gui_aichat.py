@@ -29,6 +29,7 @@ from novelwriter import CONFIG
 from novelwriter.ai.backend import AiBackend
 from novelwriter.ai.claudecode import ClaudeCodePersistentBackend
 from novelwriter.gui.aichat import GuiAiChat
+
 from tests.helpers import SimpleDialog
 
 
@@ -274,7 +275,8 @@ def testAiChat_SendBusyChunksComplete(qtbot, mockGUIwithTheme):
     assert panel.inputEdit.isReadOnly() is True
     assert panel.agentCombo.isEnabled() is False
     assert panel.btnNew.isEnabled() is False
-    assert fake.prompts and "What do you think" in fake.prompts[0]
+    assert fake.prompts
+    assert "What do you think" in fake.prompts[0]
 
     # Wait for the fake stream to finish
     with qtbot.waitSignal(fake.signals.turnComplete, timeout=2000):
@@ -335,7 +337,8 @@ def testAiChat_ChunksAppendLive(qtbot, mockGUIwithTheme):
 @pytest.mark.gui
 def testAiChat_StreamSeparatesTurnsAndShowsIndicator(qtbot, mockGUIwithTheme):
     """Mid-stream, user and assistant turns render as separate blocks, and a
-    'Thinking…'/tool indicator shows so the panel never looks frozen or merged."""
+    'Thinking…'/tool indicator shows so the panel never looks frozen or merged.
+    """
     panel, fake, dialog = _makePanel(qtbot, mockGUIwithTheme)
     fake.autoStream = False
 
@@ -538,6 +541,7 @@ def testAiChat_AgentReadOnlyPosture(qtbot, mockGUIwithTheme):
 
 @pytest.mark.gui
 def testRemoteControlOnlyRunsReadOnlyAgents(qtbot, mockGUIwithTheme):
+    """Allow remote control only for read-only agents."""
     CONFIG.aiRemoteControl = True
     CONFIG.aiRemoteControlName = "review-session"
     backend = ClaudeCodePersistentBackend(remoteControl=True)
@@ -570,7 +574,7 @@ def testAiChat_ErrorRestoresUi(qtbot, mockGUIwithTheme):
 
 @pytest.mark.gui
 def testAiChat_SetAgents(qtbot, mockGUIwithTheme):
-    """setAgents replaces the combo contents."""
+    """SetAgents replaces the combo contents."""
     panel, fake, dialog = _makePanel(qtbot, mockGUIwithTheme)
     panel.setAgents([("alpha", "First"), ("beta", "Second")], current="beta")
     assert panel.agentCombo.count() == 2
@@ -581,7 +585,7 @@ def testAiChat_SetAgents(qtbot, mockGUIwithTheme):
 
 @pytest.mark.gui
 def testAiChat_ToolActivityStatus(qtbot, mockGUIwithTheme):
-    """toolActivity updates the status line during a turn."""
+    """ToolActivity updates the status line during a turn."""
     panel, fake, dialog = _makePanel(qtbot, mockGUIwithTheme)
     fake.autoStream = False
 

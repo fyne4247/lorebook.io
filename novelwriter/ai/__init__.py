@@ -41,6 +41,7 @@ from novelwriter.ai.backend import (
     parseStreamLine,
     parseStreamLines,
 )
+from novelwriter.ai.chatlog import AiChatLog, chatLogDir
 from novelwriter.ai.claudecode import (
     ClaudeCodeBackend,
     classifyClaudeError,
@@ -48,7 +49,6 @@ from novelwriter.ai.claudecode import (
     missingBinaryMessage,
     resolveClaudeBinary,
 )
-from novelwriter.ai.chatlog import AiChatLog, chatLogDir
 from novelwriter.ai.index import (
     buildExpandBlocks,
     expandWikiTarget,

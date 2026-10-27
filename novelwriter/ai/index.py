@@ -21,10 +21,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from __future__ import annotations
 
-import logging
 import hashlib
+import logging
 import re
 import xml.etree.ElementTree as ET
+
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -115,10 +116,9 @@ def parseExpandRequests(text: str) -> list[str]:
     # Also treat bare Expand requests that list links on following lines
     for name in scanWikiLinks(text or ""):
         # Only auto-include if the message looks like an expand request
-        if re.search(rf"(?i)expand.*\[\[{re.escape(name)}\]\]", text or ""):
-            if name not in seen:
-                seen.add(name)
-                names.append(name)
+        if re.search(rf"(?i)expand.*\[\[{re.escape(name)}\]\]", text or "") and name not in seen:
+            seen.add(name)
+            names.append(name)
     return names
 
 
@@ -213,8 +213,10 @@ def generateSmartIndex(projectPath: Path | str) -> Path:
         "# Project Index",
         "",
         "_Auto-generated for AI + navigation. Prefer this over loading full notes._",
-        "Agents: start here. To load a full note, ask the user or request "
-        "`Expand [[Title]]` (the app injects the file). Or Read `content/<handle>.nwd`.",
+        (
+            "Agents: start here. To load a full note, ask the user or request "
+            "`Expand [[Title]]` (the app injects the file). Or Read `content/<handle>.nwd`."
+        ),
         "",
     ]
 
@@ -222,7 +224,7 @@ def generateSmartIndex(projectPath: Path | str) -> Path:
     orderedClasses = [c for c, _ in _SECTION_ORDER if c in byClass]
     orderedClasses += sorted(c for c in byClass if c not in orderedClasses)
 
-    sectionTitle = {c: t for c, t in _SECTION_ORDER}
+    sectionTitle = dict(_SECTION_ORDER)
 
     for cls in orderedClasses:
         heading = sectionTitle.get(cls, cls.title())

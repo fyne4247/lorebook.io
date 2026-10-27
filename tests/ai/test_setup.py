@@ -163,6 +163,7 @@ class TestIndexAndClaudeMd:
 
 @pytest.mark.core
 def testSetupPreservesCustomRootFilesOnInstallAndRefresh(projPath, mockGUI, mockRnd):
+    """Preserve project-owned root files during setup and refresh."""
     project = NWProject()
     buildTestProject(project, projPath)
     claudePath = projPath / "CLAUDE.md"
@@ -173,13 +174,15 @@ def testSetupPreservesCustomRootFilesOnInstallAndRefresh(projPath, mockGUI, mock
     first = setupProjectAi(project)
     second = setupProjectAi(project, refresh=True)
 
-    assert first.ok and second.ok
+    assert first.ok
+    assert second.ok
     assert claudePath.read_text(encoding="utf-8") == "Custom project instructions\n"
     assert indexPath.read_text(encoding="utf-8") == "Custom project index\n"
 
 
 @pytest.mark.core
 def testSetupReportsEveryRequiredStepFailure(projPath, mockGUI, mockRnd, monkeypatch):
+    """Report failures from every required AI setup step."""
     from novelwriter.ai import setup
 
     project = NWProject()

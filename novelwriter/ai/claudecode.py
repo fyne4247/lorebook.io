@@ -27,6 +27,7 @@ import os
 import shutil
 import sys
 import uuid
+
 from pathlib import Path
 
 from PyQt6.QtCore import QObject, QProcess, QProcessEnvironment, QTimer, pyqtSlot
@@ -79,9 +80,8 @@ def resolveClaudeBinary(explicit: str | None = None) -> str | None:
     whichName = "claude.cmd" if sys.platform == "win32" else "claude"
     if found := shutil.which(whichName):
         candidates.append(found)
-    if whichName != "claude":
-        if found := shutil.which("claude"):
-            candidates.append(found)
+    if whichName != "claude" and (found := shutil.which("claude")):
+        candidates.append(found)
 
     candidates.extend(_BINARY_FALLBACKS)
 
@@ -667,42 +667,49 @@ class ClaudeCodePersistentBackend(AiBackend):
     ##
 
     def setAgent(self, agent: str) -> None:
+        """Set the selected agent and mark the backend for respawning if it changed."""
         new = (agent or "").strip()
         if new != self._agent:
             self._agent = new
             self._dirty = True
 
     def setModel(self, model: str) -> None:
+        """Set the model override and mark the backend for respawning if it changed."""
         new = (model or "").strip()
         if new != self._model:
             self._model = new
             self._dirty = True
 
     def setEffort(self, effort: str) -> None:
+        """Set the effort override and mark the backend for respawning if it changed."""
         new = (effort or "").strip()
         if new != self._effort:
             self._effort = new
             self._dirty = True
 
     def setReadOnly(self, readOnly: bool) -> None:
+        """Set whether the selected agent runs with read-only permissions."""
         new = bool(readOnly)
         if new != self._readOnly:
             self._readOnly = new
             self._dirty = True
 
     def setAllowedTools(self, tools: list[str]) -> None:
+        """Set the allowed tool list and mark the backend for respawning if changed."""
         new = list(tools)
         if new != self._allowedTools:
             self._allowedTools = new
             self._dirty = True
 
     def setDisallowedTools(self, tools: list[str]) -> None:
+        """Set the denied tool list and mark the backend for respawning if changed."""
         new = list(tools)
         if new != self._disallowedTools:
             self._disallowedTools = new
             self._dirty = True
 
     def setProjectPath(self, path: Path | str | None) -> None:
+        """Set the project path and start a fresh session when it changes."""
         new = Path(path) if path else None
         if new != self._projectPath:
             self._projectPath = new

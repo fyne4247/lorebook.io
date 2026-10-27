@@ -10,6 +10,11 @@ for public sharing on 14 October 2026.
 before using it, and check that your backup can be opened before relying on it. This is a personal
 project and has not had the testing or support of a stable release.
 
+[![Linux](https://github.com/fyne4247/lorebook.io/actions/workflows/test_linux.yml/badge.svg)](https://github.com/fyne4247/lorebook.io/actions/workflows/test_linux.yml)
+[![Windows](https://github.com/fyne4247/lorebook.io/actions/workflows/test_win.yml/badge.svg)](https://github.com/fyne4247/lorebook.io/actions/workflows/test_win.yml)
+[![MacOS](https://github.com/fyne4247/lorebook.io/actions/workflows/test_mac.yml/badge.svg)](https://github.com/fyne4247/lorebook.io/actions/workflows/test_mac.yml)
+[![Linting](https://github.com/fyne4247/lorebook.io/actions/workflows/syntax.yml/badge.svg)](https://github.com/fyne4247/lorebook.io/actions/workflows/syntax.yml)
+
 ## macOS setup
 
 1. Install Python 3.11 or later.
@@ -43,7 +48,6 @@ upstream application's full documentation, see [novelwriter.io](https://novelwri
 [![Windows](https://github.com/vkbo/novelWriter/actions/workflows/test_win.yml/badge.svg)](https://github.com/vkbo/novelWriter/actions/workflows/test_win.yml)
 [![MacOS](https://github.com/vkbo/novelWriter/actions/workflows/test_mac.yml/badge.svg)](https://github.com/vkbo/novelWriter/actions/workflows/test_mac.yml)
 [![Linting](https://github.com/vkbo/novelWriter/actions/workflows/syntax.yml/badge.svg)](https://github.com/vkbo/novelWriter/actions/workflows/syntax.yml)
-[![CodeCov](https://codecov.io/gh/vkbo/novelWriter/branch/main/graph/badge.svg)](https://codecov.io/gh/vkbo/novelWriter)
 
 <img align="left" style="margin: 0 0 4px 0;" src="https://raw.githubusercontent.com/vkbo/novelWriter/main/setup/novelwriter_readme.png">
 
